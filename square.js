@@ -47,7 +47,9 @@ var Circle = function (game, settings) {
 	this.center = settings.center;
 	this.size = settings.size;
 	this.color = settings.color;
-	this.velocity = {x: 5, y:0};
+	this.velocity = {x:5, y:0};
+	this.boundingBox = this.c.collider.CIRCLE;
+	this.angle = 0;
 };
 
 Circle.prototype = {
@@ -63,18 +65,27 @@ Circle.prototype = {
 			this.center.x += this.velocity.x;
 
 		// Vertical movement
-		if(this.center.y + this.size.y/2 <= this.c.height) {
+		if(this.center.y + this.size.y/2 <= this.c.height)
 			this.velocity.y -= this.c.gravity;
-		} else {
+		else
 			this.velocity.y = 0;
-		}
-		if(this.c.inputter.isDown(this.c.inputter.I)){
+
+		if(this.c.inputter.isDown(this.c.inputter.I))
 			if(this.center.y > this.c.height - 100 && this.velocity.y >= 0)
 				this.velocity.y = 20;
-		}
 		
 		// console.log(this.velocity.y);
 		this.center.y -= this.velocity.y;
+	},
+
+	collision: function(other) {
+		var ctx = this.c.renderer.getCtx();
+		var img = new Image();
+		img.onload = function() {
+			ctx.drawImage(img, 50, 50);
+			console.log('loaded');
+		};
+		img.src = ('bang.png');
 	},
 
 	draw: function(ctx) {
@@ -97,6 +108,8 @@ var Square = function (game, settings) {
 	this.size  = settings.size;
 	this.color = settings.color;
 	this.velocity = {x:5, y:0};
+	this.boundingBox = this.c.collider.SQUARE;
+	this.angle = 0;
 };
 
 Square.prototype = {
@@ -108,15 +121,14 @@ Square.prototype = {
 			this.center.x += this.velocity.x;
 
 		// Vertical movement
-		if(this.center.y + this.size.y/2 <= this.c.height) {
+		if(this.center.y + this.size.y/2 <= this.c.height)
 			this.velocity.y -= this.c.gravity;
-		} else {
+		else
 			this.velocity.y = 0;
-		}
-		if(this.c.inputter.isDown(this.c.inputter.W)){
+
+		if(this.c.inputter.isDown(this.c.inputter.W))
 			if(this.center.y > this.c.height - 50 && this.velocity.y >= 0)
 				this.velocity.y = 10;
-		}
 		
 		// console.log(this.velocity.y);
 		this.center.y -= this.velocity.y;
